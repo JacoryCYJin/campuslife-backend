@@ -1,1 +1,12 @@
-spring.application.name=campuslife-backend
+spring:
+  application:
+    name: jacory-space-api
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/campus_life?useSSL=false&serverTimezone=UTC
+    username: root
+    password: Jinchengyue1124@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 6666
