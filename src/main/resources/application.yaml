@@ -10,3 +10,13 @@ spring:
 
 server:
   port: 6666
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.example.campuslifebackend.domain.po
+  configuration:
+    map-underscore-to-camel-case: true
+
+wx:
+  appid: 你的微信小程序appid
+  secret: 你的微信小程序secret

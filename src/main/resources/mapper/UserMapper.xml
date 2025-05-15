@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.campuslifebackend.mapper.UserMapper">
+    <select id="getUserLoginByPhone" resultType="org.example.campuslifebackend.domain.po.UserLoginPO">
+        SELECT * FROM user_login
+        WHERE identifier = #{phoneNumber}
+        AND login_type = 1
+        AND is_deleted = 0
+        LIMIT 1
+    </select>
+    
+    <select id="getUserLoginByWxOpenid" resultType="org.example.campuslifebackend.domain.po.UserLoginPO">
+        SELECT * FROM user_login
+        WHERE identifier = #{openid}
+        AND login_type = 2
+        AND is_deleted = 0
+        LIMIT 1
+    </select>
+    
+    <select id="getUserByNanoid" resultType="org.example.campuslifebackend.domain.po.UserPO">
+        SELECT * FROM user
+        WHERE nanoid = #{userNanoid}
+        AND is_deleted = 0
+        LIMIT 1
+    </select>
+    
+    <select id="getPhoneLoginByUserNanoid" resultType="org.example.campuslifebackend.domain.po.UserLoginPO">
+        SELECT * FROM user_login
+        WHERE user_nanoid = #{userNanoid}
+        AND login_type = 1
+        AND is_deleted = 0
+        LIMIT 1
+    </select>
+    
+    <insert id="createUser" parameterType="org.example.campuslifebackend.domain.po.UserPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (nanoid, nickname, avatar_url, create_time, update_time, is_deleted)
+        VALUES (#{nanoid}, #{nickname}, #{avatarUrl}, #{createTime}, #{updateTime}, #{isDeleted})
+    </insert>
+    
+    <insert id="createUserLogin" parameterType="org.example.campuslifebackend.domain.po.UserLoginPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_login (nanoid, user_nanoid, login_type, identifier, credential, create_time, update_time, is_deleted)
+        VALUES (#{nanoid}, #{userNanoid}, #{loginType}, #{identifier}, #{credential}, #{createTime}, #{updateTime}, #{isDeleted})
+    </insert>
+    
+    <update id="updateUser" parameterType="org.example.campuslifebackend.domain.po.UserPO">
+        UPDATE user
+        <set>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="avatarUrl != null">avatar_url = #{avatarUrl},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE nanoid = #{nanoid}
+    </update>
+    
+    <insert id="bindPhone" parameterType="org.example.campuslifebackend.domain.po.UserLoginPO">
+        INSERT INTO user_login (nanoid, user_nanoid, login_type, identifier, credential, create_time, update_time, is_deleted)
+        VALUES (#{nanoid}, #{userNanoid}, #{loginType}, #{identifier}, #{credential}, #{createTime}, #{updateTime}, #{isDeleted})
+    </insert>
+</mapper>
