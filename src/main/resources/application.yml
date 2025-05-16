@@ -20,3 +20,6 @@ mybatis:
 wx:
   appid: 你的微信小程序appid
   secret: 你的微信小程序secret
+
+jwt:
+  secret: Z9I9JMPDfXeZJZ9UeHD+aKHvu6egHPbP8sfeyEjJatg=
