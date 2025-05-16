@@ -21,4 +21,9 @@ public class UserLoginDTO {
      * 凭证（密码或空）
      */
     private String credential;
+    
+    /**
+     * 登录类型(1手机号，2微信)
+     */
+    private Integer loginType;
 }
