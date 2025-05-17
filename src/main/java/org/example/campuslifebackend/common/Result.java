@@ -3,6 +3,7 @@ package org.example.campuslifebackend.common;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.campuslifebackend.common.enums.ResultEnum;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,15 +15,15 @@ public class Result<T> {
     
     public static <T> Result<T> success(T data) {
         Result<T> result = new Result<>();
-        result.setCode(200);
-        result.setMessage("操作成功");
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMessage(ResultEnum.SUCCESS.getMessage());
         result.setData(data);
         return result;
     }
     
     public static <T> Result<T> success(String message, T data) {
         Result<T> result = new Result<>();
-        result.setCode(200);
+        result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMessage(message);
         result.setData(data);
         return result;
@@ -34,8 +35,8 @@ public class Result<T> {
      */
     public static Result<Void> success() {
         Result<Void> result = new Result<>();
-        result.setCode(200);
-        result.setMessage("操作成功");
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMessage(ResultEnum.SUCCESS.getMessage());
         return result;
     }
     
@@ -64,6 +65,6 @@ public class Result<T> {
      * @return 结果对象
      */
     public static <T> Result<T> fail(String message) {
-        return fail(400, message);
+        return fail(ResultEnum.PARAM_ERROR.getCode(), message);
     }
 }

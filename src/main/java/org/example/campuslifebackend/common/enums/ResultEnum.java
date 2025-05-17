@@ -4,7 +4,7 @@ package org.example.campuslifebackend.common.enums;
  * 结果枚举类
  */
 public enum ResultEnum {
-    SUCCESS(200, "成功"),
+    SUCCESS(200, "操作成功"),
     PARAM_ERROR(400, "参数错误"),
     UNAUTHORIZED(401, "未授权"),
     FORBIDDEN(403, "禁止访问"),
