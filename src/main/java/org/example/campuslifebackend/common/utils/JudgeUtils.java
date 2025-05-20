@@ -1,4 +1,4 @@
-package org.example.campuslifebackend.utils;
+package org.example.campuslifebackend.common.utils;
 
 import org.example.campuslifebackend.common.enums.ResultEnum;
 import org.example.campuslifebackend.exception.BusinessException;

@@ -1,4 +1,4 @@
-package org.example.campuslifebackend.utils;
+package org.example.campuslifebackend.common.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

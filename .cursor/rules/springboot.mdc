@@ -1,0 +1,179 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Java与Spring Boot通用开发规范
+
+## 角色定义
+
+你是一个经验丰富的开发者，擅长技术：
+- 服务端：JAVA、Spring Boot、Spring Framework、Maven、Mybatis、以及其他JAVA相关技术
+- 前端：TypeScript、Node.js、Element UI等其他前端组件
+- 微信小程序：微信组件、微信支付、微信登录等微信相关技术
+
+## 项目结构
+```
+campuslife-backend
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── org.example.campuslifebackend
+│   │   │       ├── common             // 通用组件
+│   │   │       │   ├── enums          // 枚举类
+│   │   │       │   ├── page           // 分页相关
+│   │   │       │   ├── utils          // 工具类
+│   │   │       │   └── Result.java    // 统一响应类
+│   │   │       ├── controller         // 控制器层
+│   │   │       ├── converter          // 数据转换器
+│   │   │       ├── domain             // 领域模型
+│   │   │       │   ├── dto            // 数据传输对象
+│   │   │       │   ├── po             // 持久化对象
+│   │   │       │   └── vo             // 视图对象
+│   │   │       ├── exception          // 异常处理
+│   │   │       ├── mapper             // MyBatis映射接口
+│   │   │       ├── service            // 业务逻辑层
+│   │   │           ├── impl           // 接口实现类
+│   │   │           └── *Service.java  // 服务接口
+│   │   └── resources
+│   │       ├── mapper                 // MyBatis XML映射文件
+│   │       ├── static                 // 静态资源
+│   │       ├── templates              // 模板文件
+│   │       └── application.yml        // 应用配置文件
+│   └── test                           // 测试代码
+└── pom.xml                            // Maven配置文件
+```
+
+## 接口规范
+
+### RESTful API设计
+
+- **URI命名**: 使用名词单数形式，如/user，而非/users
+- **HTTP方法**:
+  - GET: 查询资源
+  - POST: 创建资源
+  - PUT: 更新资源(全量)
+  - PATCH: 部分更新资源
+  - DELETE: 删除资源
+
+### 响应格式
+```json
+{
+  "code": 200,     // 状态码：200成功，4xx客户端错误，5xx服务端错误
+  "message": "操作成功", // 响应消息
+  "data": {}       // 响应数据，可为null
+}
+```
+
+### 状态码规范
+- 200: 成功
+- 400: 请求参数错误
+- 401: 未授权
+- 403: 权限不足
+- 404: 资源不存在
+- 409: 资源冲突
+- 500: 服务器内部错误
+
+### 版本控制
+- 在URL中包含版本号: `/api/v1/users`
+- 或使用请求头: `Accept: application/vnd.example.v1+json`
+
+### 安全认证
+- 使用JWT进行身份验证
+- 请求头格式: `Authorization: Bearer {token}`
+
+### 参数验证
+- 使用Spring Validation框架进行参数校验
+- 返回明确的错误提示
+
+### 分页查询
+- 请求参数: `page`(页码，从1开始)、`size`(每页数量)
+- 响应数据包含: `total`(总记录数)、`pages`(总页数)、`list`(数据列表)
+
+## 技术栈
+
+### 服务端
+- **核心框架**: Spring Boot 3.4.5
+- **ORM框架**: MyBatis 3.0.3 + PageHelper
+- **数据库**: MySQL 8.0
+- **构建工具**: Maven
+- **JDK版本**: Java 17
+- **安全框架**: JWT (io.jsonwebtoken)
+
+### 工具库
+- **Lombok**: 简化Java Bean开发
+- **Hutool**: 丰富的Java工具类库
+- **NanoId**: 生成唯一ID
+- **Validation**: 参数校验
+
+## 开发规范
+
+### 代码风格与结构
+- **代码质量**：编写清晰、高效且文档完善的Java代码
+- **最佳实践**：遵循Spring Boot最佳实践和编码约定
+- **API设计**：实现RESTful API设计模式
+- **命名规范**：使用描述性方法和变量名，遵循驼峰命名法
+- **项目结构**：结构化Spring Boot应用：控制器、服务、仓库、模型、配置
+
+### 命名规范
+- **类名**：使用帕斯卡命名法（如`UserController`、`OrderService`）
+- **方法和变量**：使用驼峰命名法（如`findUserById`、`isOrderValid`）
+- **常量**：使用全大写（如`MAX_RETRY_ATTEMPTS`、`DEFAULT_PAGE_SIZE`）
+- **包名**：全小写，有意义的名称（如`com.company.module.service`）
+
+### 依赖注入与IoC
+- **注入方式**：优先使用构造函数注入，提高可测试性
+- **容器管理**：充分利用Spring的IoC容器管理Bean生命周期
+- **组件标记**：正确使用`@Component`、`@Service`、`@Repository`等注解
+
+### 异常处理与日志
+- **统一异常处理**：使用`@ControllerAdvice`和`@ExceptionHandler`实现全局异常处理
+- **日志记录**：使用SLF4J+Logback，合理设置日志级别（ERROR、WARN、INFO、DEBUG）
+- **上下文追踪**：使用MDC记录请求追踪ID、用户ID等上下文信息
+- **异常分类**：区分业务异常和系统异常，合理设计异常继承体系
+
+### 数据访问
+- **ORM使用**：优先使用MyBatis
+- **事务管理**：正确使用`@Transactional`注解，指定传播行为和隔离级别
+- **查询优化**：实现必要的索引和分页查询，避免大数据量查询
+- **连接池**：合理配置数据库连接池参数
+
+### 安全性
+- **身份验证**：使用Spring Security实现统一认证机制
+- **密码安全**：使用BCrypt等安全的密码加密算法
+- **输入验证**：使用Bean Validation实现参数校验
+- **跨域设置**：必要时配置CORS，限制可访问的域名和方法
+
+### 性能与扩展性
+- **缓存策略**：使用Spring Cache抽象实现缓存
+- **异步处理**：使用`@Async`进行非阻塞操作
+- **限流控制**：实现关键接口的限流机制
+- **监控指标**：使用Spring Boot Actuator暴露健康检查和监控指标
+
+### 测试规范
+- **单元测试**：使用JUnit 5编写单元测试，覆盖核心业务逻辑
+- **Mock测试**：使用Mockito进行依赖模拟
+- **接口测试**：使用MockMvc测试RESTful接口
+- **测试覆盖率**：保持合理的测试覆盖率，关注核心功能
+
+### API文档
+- **规范文档**：使用Springdoc OpenAPI (Swagger)生成API文档
+- **注释完整**：为API添加完整的注释说明、参数描述和返回值信息
+- **版本控制**：实现API版本控制策略
+
+### 构建与部署
+- **依赖管理**：使用Maven管理依赖和构建流程
+- **环境配置**：使用Spring Profiles分离不同环境配置（dev、test、prod）
+- **容器化**：支持Docker容器化部署
+
+### 代码维护
+- **代码清理**：替换新的解决方案后，检查并删除无用代码
+- **错误检查**：每次修改后检查编译器/IDE报错并立即修复
+- **零错误提交**：禁止提交包含编译错误的代码
+- **修改一致性**：确保相关模块的一致性
+
+### 安全最佳实践
+- **敏感信息**：不在代码中硬编码敏感信息，使用环境变量或配置中心
+- **权限控制**：实现细粒度的权限控制，遵循最小权限原则
+- **安全审计**：记录关键操作的审计日志
+- **依赖扫描**：定期扫描第三方依赖的安全漏洞
